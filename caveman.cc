@@ -16,8 +16,8 @@ int main(int argc, char** argv)
     file.open(argv[3], std::ios::out | std::ios::trunc | std::ios::binary);
 
     caveman cave;
-    for (int j = 221; j < K; j += 20)
-      for (int i = 222; i < k; i += 20)
+    for (int j = 0; j < K; j += 10)
+      for (int i = 0; i < k; i += 10)
       {
         cave.set_params(i, j);
         cave.dump_caveman("cave.bin");
