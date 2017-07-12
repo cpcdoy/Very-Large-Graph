@@ -13,7 +13,7 @@ int main(int argc, char** argv)
     auto from_k = std::atoi(argv[3]);
     auto from_K = std::atoi(argv[4]);
     auto offset = std::atoi(argv[5]);
-    std::cout << "Generating caveman graphs from k = " << from_k << " and K = " << K << " to k = " << k << " and K = " << K << " with offset = " << offset << std::endl;
+    std::cout << "Generating caveman graphs from k = " << from_k << " and K = " << from_K << " to k = " << k << " and K = " << K << " with offset = " << offset << std::endl;
 
     std::ofstream file;
     file.open(argv[6], std::ios::out | std::ios::trunc | std::ios::binary);
