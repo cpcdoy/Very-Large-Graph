@@ -6,18 +6,21 @@
 
 int main(int argc, char** argv)
 {
-  if (argc > 2)
+  if (argc > 4)
   {
     auto k = std::atoi(argv[2]);
     auto K = std::atoi(argv[1]);
-    std::cout << "Generating caveman graphs up to k = " << k << " and K = " << K << std::endl;
+    auto from_k = std::atoi(argv[3]);
+    auto from_K = std::atoi(argv[4]);
+    auto offset = std::atoi(argv[5]);
+    std::cout << "Generating caveman graphs from k = " << from_k << " and K = " << K << " to k = " << k << " and K = " << K << " with offset = " << offset << std::endl;
 
     std::ofstream file;
-    file.open(argv[3], std::ios::out | std::ios::trunc | std::ios::binary);
+    file.open(argv[6], std::ios::out | std::ios::trunc | std::ios::binary);
 
     caveman cave;
-    for (int j = 0; j < K; j += 10)
-      for (int i = 0; i < k; i += 10)
+    for (int j = from_K; j < K; j += offset)
+      for (int i = from_k; i < k; i += offset)
       {
         cave.set_params(i, j);
         cave.dump_caveman("cave.bin");
