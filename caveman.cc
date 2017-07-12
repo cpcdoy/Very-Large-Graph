@@ -8,10 +8,10 @@ int main(int argc, char** argv)
 {
   if (argc > 4)
   {
-    auto k = std::atoi(argv[2]);
-    auto K = std::atoi(argv[1]);
-    auto from_k = std::atoi(argv[4]);
-    auto from_K = std::atoi(argv[3]);
+    auto k = std::atoi(argv[1]);
+    auto K = std::atoi(argv[2]);
+    auto from_k = std::atoi(argv[3]);
+    auto from_K = std::atoi(argv[4]);
     auto offset = std::atoi(argv[5]);
     std::cout << "Generating caveman graphs from k = " << from_k << " and K = " << from_K << " to k = " << k << " and K = " << K << " with offset = " << offset << std::endl;
 
