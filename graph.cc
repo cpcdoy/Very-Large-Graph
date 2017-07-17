@@ -11,8 +11,9 @@ int caveman::get_nb_nodes()
   return (clique_size * (clique_size - 1) * nb_cliques) / 2;
 }
 
-void caveman::dump_caveman(char* path)
+void caveman::dump_caveman(int k, int K, const char* path)
 {
+  set_params(k, K);
   std::ofstream file;
   file.open(path, std::ios::out | std::ios::trunc | std::ios::binary);
 

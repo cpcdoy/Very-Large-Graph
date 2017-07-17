@@ -17,7 +17,7 @@ class caveman
 
     void set_params(int k, int K);
     int get_nb_nodes();
-    void dump_caveman(char* path);
+    void dump_caveman(int k, int K, const char* path);
 
   private:
     int clique_size = 0;
