@@ -5,17 +5,30 @@
 #include <mutex>
 #include <thread>
 
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+
 #include "graph.hh"
 
 std::mutex mutex;
 
-void compute(caveman& cave, std::ofstream& file, int from_k, int from_K, int k, int K, int offset, int t)
+long get_file_size(std::string file_name)
+{
+    struct stat stat_buf;
+    int rc = stat(file_name.c_str(), &stat_buf);
+    return rc == 0 ? stat_buf.st_size : -1;
+}
+
+void compute(std::ofstream& file, int from_k, int from_K, int k, int K, int offset, int t)
 {
   std::cout << "Thread " << t << " : from k = " << from_k << " and K = " << from_K << " to k = " << k << " and K = " << K << " with offset = " << offset << std::endl;
+  caveman cave;
   for (int j = from_K; j < K; j += offset)
     for (int i = from_k; i < k; i += offset)
     {
-      cave.dump_caveman(i + t * offset, j, std::string("cave_" + std::to_string(t) + ".bin").c_str());
+      std::string file_name("cave_" + std::to_string(t) + ".bin");
+      cave.dump_caveman(i, j, file_name.c_str());
 
       std::lock_guard<std::mutex> lock(mutex);
 
@@ -26,8 +39,8 @@ void compute(caveman& cave, std::ofstream& file, int from_k, int from_K, int k, 
       auto end = std::chrono::system_clock::now();
       auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
 
-      file << i << " " << j << " " << (double)elapsed.count() / 100.0 << " " << cave.get_nb_nodes() << std::endl;
-      std::cout << "Thread " << t <<  " : " << i << " " << j << " " << (double)elapsed.count() / 100.0 << " " << cave.get_nb_nodes() << std::endl;
+      file << i << " " << j << " " << (double)elapsed.count() / 100.0 << " " << cave.get_nb_nodes() << " " << get_file_size(file_name) << std::endl;
+      std::cout << "Thread " << t <<  " : " << i << " " << j << " " << (double)elapsed.count() / 100.0 << " " << cave.get_nb_nodes() << " " << get_file_size(file_name) << std::endl;
     }
 }
 
@@ -49,14 +62,13 @@ int main(int argc, char** argv)
 
     std::cout << "Spawning " << nb_threads << " threads" << std::endl;
 
-    caveman cave;
     std::vector<std::thread> tids;
 
     for (int t = 0; t < nb_threads; t++)
     {
       auto step = t * (K - from_K) / nb_threads;
       auto step2 = (t + 1) * (K - from_K) / nb_threads;
-      std::thread th(compute, std::ref(cave), std::ref(file), from_k, from_K + step, k, from_K + step2, offset, t);
+      std::thread th(compute, std::ref(file), from_k, from_K + step, k, from_K + step2, offset, t);
       tids.push_back(std::move(th));
     }
     for (auto& tid : tids)

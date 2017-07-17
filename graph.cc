@@ -1,5 +1,7 @@
 #include "graph.hh"
 
+#include <iostream>
+
 void caveman::set_params(int k, int K)
 {
   this->clique_size = k;
