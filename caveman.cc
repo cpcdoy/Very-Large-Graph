@@ -32,10 +32,11 @@ void compute(std::ofstream& file, int from_k, int from_K, int k, int K, int offs
 
       std::lock_guard<std::mutex> lock(mutex);
 
-      std::system("./convert -i cave.bin -o conv.bin 2>/dev/null 3>/dev/null 1> /dev/null");
+      std::string convert("./convert -i " + file_name + " -o conv.bin 2>/dev/null 3>/dev/null 1> /dev/null");
+      std::system(convert.c_str());
 
       auto start = std::chrono::system_clock::now();
-      std::system("./community conv.bin -l -1 2>/dev/null 3> /dev/null 1> /dev/null");
+      std::system("./community conv.bin -l -1 2>/dev/null 3>/dev/null 1> /dev/null");
       auto end = std::chrono::system_clock::now();
       auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
 
